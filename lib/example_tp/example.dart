@@ -1,3 +1,0 @@
-sayHello() {
-  return "Bonjour";
-}

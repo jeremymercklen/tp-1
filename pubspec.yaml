@@ -1,4 +1,4 @@
-name: example
+name: tp1
 environment:
   sdk: ^3.0.3
 dependencies:
