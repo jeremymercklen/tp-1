@@ -3,7 +3,7 @@ import 'package:test/scaffolding.dart';
 import 'package:tp1/searchengine/Tree.dart';
 import 'package:tp1/tools/TextTools.dart';
 
-main() {
+main() async {
   test("exo1", () {
     Tree? tree = null;
     tree = insertInTree(tree, "Posix", "");
@@ -81,5 +81,15 @@ main() {
     expect(tree?.resultatsRecherche.elementAt(1).filename, "c");
     expect(tree?.resultatsRecherche.elementAt(2).count, 1);
     expect(tree?.resultatsRecherche.elementAt(2).filename, "b");
+  });
+
+  test("exo2", () async {
+    Index index = Index();
+    List<SearchResult> resultatsRecherche = [];
+    await index.build("textes");
+    resultatsRecherche = index.find('vente');
+    expect(resultatsRecherche.elementAt(0).count, 4);
+    expect(resultatsRecherche.elementAt(3).filename,
+        "textes\\code_de_l_environnement\\R213-1.txt");
   });
 }

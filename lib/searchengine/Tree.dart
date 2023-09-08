@@ -1,4 +1,5 @@
 import 'package:quiver/strings.dart';
+import 'package:tp1/tools/TextFileTools.dart';
 import 'package:tp1/tools/TextTools.dart';
 import '../tools/FileReader.dart';
 
@@ -46,10 +47,31 @@ walkTree(Tree? arbre, action) {
 
 findInTree(Tree? arbre, String mot, List<SearchResult> resultatsRecherche) {
   if (arbre == null) return;
-  if (arbre.mot == mot) {
-    arbre.resultatsRecherche = resultatsRecherche;
+  if (compareIgnoreCase(arbre.mot, mot) == 0) {
+    resultatsRecherche.addAll(arbre.resultatsRecherche);
     return;
   }
   findInTree(arbre.filGauche, mot, resultatsRecherche);
   findInTree(arbre.filDroit, mot, resultatsRecherche);
+}
+
+class Index {
+  Tree? arbre;
+
+  build(String nomRepertoire) async {
+    await walkDirectory(nomRepertoire, (path) {
+      FileReader fichier = FileReader(path);
+      while (!fichier.isEndOfFile()) {
+        String? mot = readWord(fichier);
+        if (mot != null) arbre = insertInTree(arbre, mot, path);
+      }
+    });
+  }
+
+  List<SearchResult> find(String mot) {
+    List<SearchResult> resultatsRecherche = [];
+    findInTree(arbre, mot, resultatsRecherche);
+    resultatsRecherche.sort((a, b) => b.count.compareTo(a.count));
+    return resultatsRecherche;
+  }
 }

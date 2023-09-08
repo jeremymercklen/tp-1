@@ -14,6 +14,7 @@ String? readWord(FileReader fichier) {
         caractereActuel != ";" &&
         caractereActuel != ":" &&
         caractereActuel != "\n" &&
+        caractereActuel != "\r" &&
         caractereActuel != "(" &&
         caractereActuel != ")") {
       if (!fichier.isEndOfFile()) {
