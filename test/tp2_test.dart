@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 import 'package:tp1/searchengine/Tree.dart';
@@ -38,7 +36,7 @@ main() {
     tree = insertInTree(tree, "Posix", "c");
     tree = insertInTree(tree, "Posix", "a");
 
-    tree = insertInTree(tree, "BSD", "a");
+    tree = insertInTree(tree, "BSD", "ab");
     tree = insertInTree(tree, "BSD", "b");
     tree = insertInTree(tree, "BSD", "c");
     tree = insertInTree(tree, "BSD", "a");
@@ -56,7 +54,32 @@ main() {
     tree = insertInTree(tree, "ANSI", "a");
     tree = insertInTree(tree, "ANSI", "a");
 
-    List<SearchResult> resultatsTrouve = [];
-    expect(resultatsTrouve.length, 3);
+    var mots = <String>[];
+    walkTree(tree, (mot) => mots.add(mot));
+    expect(mots.length, 3);
+    expect(tree.resultatsRecherche.elementAt(0).count, 3);
+    expect(tree.resultatsRecherche.elementAt(0).filename, "a");
+    expect(tree.resultatsRecherche.elementAt(1).count, 1);
+    expect(tree.resultatsRecherche.elementAt(1).filename, "b");
+    expect(tree.resultatsRecherche.elementAt(2).count, 1);
+    expect(tree.resultatsRecherche.elementAt(2).filename, "c");
+
+    tree = tree.filGauche;
+    expect(tree?.resultatsRecherche.elementAt(0).count, 1);
+    expect(tree?.resultatsRecherche.elementAt(0).filename, "ab");
+    expect(tree?.resultatsRecherche.elementAt(1).count, 2);
+    expect(tree?.resultatsRecherche.elementAt(1).filename, "b");
+    expect(tree?.resultatsRecherche.elementAt(2).count, 3);
+    expect(tree?.resultatsRecherche.elementAt(2).filename, "c");
+    expect(tree?.resultatsRecherche.elementAt(3).count, 3);
+    expect(tree?.resultatsRecherche.elementAt(3).filename, "a");
+
+    tree = tree?.filGauche;
+    expect(tree?.resultatsRecherche.elementAt(0).count, 5);
+    expect(tree?.resultatsRecherche.elementAt(0).filename, "a");
+    expect(tree?.resultatsRecherche.elementAt(1).count, 1);
+    expect(tree?.resultatsRecherche.elementAt(1).filename, "c");
+    expect(tree?.resultatsRecherche.elementAt(2).count, 1);
+    expect(tree?.resultatsRecherche.elementAt(2).filename, "b");
   });
 }
